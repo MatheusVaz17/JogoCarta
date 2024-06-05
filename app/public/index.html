@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fodinha Online</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        header, section {
+            width: 70%;
+            margin: auto;
+        }
+
+        .input {
+            display: flex;
+            flex-direction: column;
+            width: fit-content;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h2>FODINHA ONLINE</h2>
+    </header>
+    <section>
+        <form action="/access" method="POST">
+            <div class="input">
+                <label>Nome do usuário: </label>
+                <input type="text" name="name" id="name"/>
+            </div>
+            <button type="submit">Entrar</button>
+        </form>
+    </section>
+</body>
+</html>

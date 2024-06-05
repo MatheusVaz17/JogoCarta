@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game</title>
+    <style>
+        [draggable=true] {
+            cursor: grab;
+        }
+
+        [draggable=true]:active {
+            cursor: grabbing
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .chat {
+            width: 25%;
+            height: 100%;
+            border-radius: 15px;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat ul {
+            width: 100%;
+            flex-grow: 2;
+            resize: none;
+            overflow-y: auto;
+            border-left: 2px solid;
+        }
+
+        .chat div {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .chat div input {
+            width: 100%;
+            height: 40px;
+            margin: 5px;
+        }
+
+        .chat div button {
+            width: 80px;
+            margin: 5px;
+        }
+
+        .game {
+            width: 75%;
+            height: 100%;
+        }
+
+        .table {
+            width: 100%;
+            height: 75%;
+            border-radius: 15px;
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .hand {
+            width: 100%;
+            height: 25%;
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+
+            background: linear-gradient(to right, rgb(133, 103, 40), rgb(112, 104, 32));
+        }
+
+        .card {
+            height: 145px;
+            width: 100px;
+            background-color: #eee;
+            border: 1px solid #dedede;
+            cursor: grab;
+            border-radius: 5px;
+        }
+
+        .card h2 {
+            color: #333;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .card p {
+            color: #333;
+            font-family: Arial, Helvetica, sans-serif;
+            position: relative;
+            font-size: 82px;
+            text-align: center;
+            line-height: 100%;
+        }
+
+        .card[red="true"] p,
+        .card[red="true"] h2 {
+            color: red;
+        }
+
+        .videoCard{
+            position:absolute;
+            height:20vh;
+            width:100%;
+            overflow: hidden;
+            margin-left: 10px;
+        }
+
+        .videoCard video{
+            width: 10%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="game">
+        <div id="videoDiv" class="videoCard"></div>
+        <div class="table">
+            <div class="card" draggable="true" red="true">
+                <h2>K</h2>
+                <p>♦</p>
+            </div>
+            <div class="card" draggable="true" red="true">
+                <h2>K</h2>
+                <p>♦</p>
+            </div>
+        </div>
+        <div class="hand">
+            <div class="card" draggable="true">
+                <h2>A</h2>
+                <p>♠</p>
+            </div>
+            <div class="card" draggable="true">
+                <h2>3</h2>
+                <p>♣</p>
+            </div>
+            <div class="card" draggable="true" red="true">
+                <h2>10</h2>
+                <p>♥</p>
+            </div>
+            <div class="card" draggable="true" red="true">
+                <h2>K</h2>
+                <p>♦</p>
+            </div>
+        </div>
+    </div>
+    <div class="chat">
+        <ul id="chat"></ul>
+        <div>
+            <input id="chat_inputMessage" />
+            <button id="chat_sendMessage" onclick="sendMessageChat(document.getElementById('chat_inputMessage').value)">Enviar</button>
+        </div>
+    </div>
+
+
+
+    <script type="text/javascript">
+        var roomID = "123"
+    </script>
+    <script src="socket.io/socket.io.js"></script>
+    <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
+    <script defer>
+        const socket = io('/');
+        const peer = new Peer();
+        let myVideoStream;
+        let myId;
+        var videoGrid = document.getElementById('videoDiv')
+        var myvideo = document.createElement('video');
+        myvideo.muted = true;
+        const peerConnections = {}
+        var chat = document.getElementById('chat');
+
+        navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: true
+        }).then((stream) => {
+            myVideoStream = stream;
+            addVideo(myvideo, stream);
+            peer.on('call', call => {
+                call.answer(stream);
+                const vid = document.createElement('video');
+                call.on('stream', userStream => {
+                    addVideo(vid, userStream);
+                })
+                call.on('error', (err) => {
+                    alert(err)
+                })
+                call.on("close", () => {
+                    console.log(vid);
+                    vid.remove();
+                })
+                peerConnections[call.peer] = call;
+            })
+        }).catch(err => {
+            alert(err.message)
+        })
+
+        peer.on('open', (id) => {
+            myId = id;
+            socket.emit("newUser", id, roomID);
+        })
+
+        peer.on('error', (err) => {
+            alert(err.type);
+        });
+
+        socket.on('userJoined', id => {
+            console.log("new user joined")
+            const call = peer.call(id, myVideoStream);
+            const vid = document.createElement('video');
+            call.on('error', (err) => {
+                alert(err);
+            })
+            call.on('stream', userStream => {
+                addVideo(vid, userStream);
+            })
+            call.on('close', () => {
+                vid.remove();
+                console.log("user disconect")
+            })
+            peerConnections[id] = call;
+        })
+
+        socket.on('userDisconnect', id => {
+            if (peerConnections[id]) {
+                peerConnections[id].close();
+            }
+        })
+
+        function addVideo(video, stream) {
+            video.srcObject = stream;
+            video.addEventListener('loadedmetadata', () => {
+                video.play()
+            })
+            videoGrid.append(video);
+        }
+
+        function sendMessageChat(msg){
+            if(msg){
+                socket.emit('chat message', msg);
+                msg = '';
+            }
+        }
+
+        socket.on('chat message', function(userName, colorName, msg){
+            const colors = ['#4287f5', '#f22e2e', '#3ceb10', '#e0eb10', '#542020'];
+            var item = document.createElement('li');
+            item.textContent = userName+': '+msg;
+            item.style.color = colorName;
+            chat.appendChild(item);
+            document.getElementById('chat_inputMessage').value = '';
+        });
+    </script>
+</body>
+
+</html>
