@@ -11,37 +11,13 @@
 <body>
     <div class="game">
         <div id="videoDiv" class="videoCard"></div>
+        <input type="hidden" value="<%= name %>" id="userName">
+        <input type="hidden" value="<%= name %>" id="userColor">
         <div class="table">
             <canvas id="gameCanvas" width="600" height="400"></canvas>
-            <!-- ToDo -->
-            <!-- <div class="card" draggable="true" red="true">
-                <h2>K</h2>
-                <p>♦</p>
-            </div>
-            <div class="card" draggable="true" red="true">
-                <h2>K</h2>
-                <p>♦</p>
-            </div> -->
         </div>
         <div class="hand">
             <button id="dealButton">Distribuir Cartas</button>
-            <!-- ToDo -->
-            <!-- <div class="card" draggable="true">
-                <h2>A</h2>
-                <p>♠</p>
-            </div>
-            <div class="card" draggable="true">
-                <h2>3</h2>
-                <p>♣</p>
-            </div>
-            <div class="card" draggable="true" red="true">
-                <h2>10</h2>
-                <p>♥</p>
-            </div>
-            <div class="card" draggable="true" red="true">
-                <h2>K</h2>
-                <p>♦</p>
-            </div> -->
         </div>
     </div>
     <div class="chat">

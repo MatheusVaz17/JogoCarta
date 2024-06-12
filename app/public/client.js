@@ -7,7 +7,7 @@ var myvideo = document.createElement('video');
 myvideo.muted = true;
 const peerConnections = {}
 var chat = document.getElementById('chat');
-var userName = '';
+var userName = document.getElementById('userName').value;
 
 navigator.mediaDevices.getUserMedia({
     video: true,
@@ -35,7 +35,8 @@ navigator.mediaDevices.getUserMedia({
 
 peer.on('open', (id) => {
     myId = id;
-    socket.emit("newUser", id, roomID);
+    socket.emit("newUser", id, userName, document.getElementById('userColor').value);
+    sendMessageChat('Entrou na sala!');
 })
 
 peer.on('error', (err) => {
@@ -43,7 +44,7 @@ peer.on('error', (err) => {
 });
 
 socket.on("connect", () => {
-    sendMessageChat('Entrou na sala!');
+    // sendMessageChat('Entrou na sala!');
 })
 
 socket.on("userJoined", id => {
@@ -61,11 +62,11 @@ socket.on("userJoined", id => {
     peerConnections[id] = call;
 })
 
-socket.on('userDisconnect', id => {
+socket.on('userDisconnect', (id, socket_id) => {
     if (peerConnections[id]) {
         peerConnections[id].close();
+        sendMessageChat('Saiu da sala!', socket_id);
     }
-    sendMessageChat('Saiu da sala!');
 })
 
 function addVideo(video, stream) {
@@ -76,9 +77,9 @@ function addVideo(video, stream) {
     videoGrid.append(video);
 }
 
-function sendMessageChat(msg){
+function sendMessageChat(msg, socket_id=null){
     if(msg){
-        socket.emit('chat message', socket.id, msg);
+        socket.emit('chat message', socket_id !== null ? socket_id : socket.id, msg);
         msg = '';
     }
 }
@@ -98,28 +99,6 @@ const dealButton = document.getElementById('dealButton');
 const cardWidth = 80;
 const cardHeight = 120;
 
-const suits = ['♠', '♥', '♦', '♣'];
-const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
-
-function createDeck() {
-    let deck = [];
-    for (let suit of suits) {
-        for (let value of values) {
-            deck.push({ value, suit });
-        }
-    }
-    return deck;
-}
-
-// Função para embaralhar o baralho
-function shuffleDeck(deck) {
-    for (let i = deck.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [deck[i], deck[j]] = [deck[j], deck[i]];
-    }
-    return deck;
-}
-
 // Função para desenhar uma carta
 function drawCard(card, x, y) {
     ctx.fillStyle = 'white';
@@ -131,24 +110,12 @@ function drawCard(card, x, y) {
     ctx.fillText(card.suit, x + 10, y + 60);
 }
 
-function dealCards() {
+socket.on('clearRectCards', function(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    let deck = shuffleDeck(createDeck());
-
-    // Distribuir 5 cartas para o Jogador 1
-    for (let i = 0; i < 5; i++) {
-        drawCard(deck.pop(), 50 + i * (cardWidth + 10), 50);
-    }
-
-    // Distribuir 5 cartas para o Jogador 2
-    for (let i = 0; i < 5; i++) {
-        drawCard(deck.pop(), 50 + i * (cardWidth + 10), 200);
-    }
-}
-
-socket.on('dealCards', function(){
-    dealCards();
 });
 
-dealButton.addEventListener('click', () => {socket.emit('dealCards')});
+socket.on('drawCards', function(card, x, y){
+    drawCard(card, x, y);
+});
+
+dealButton.addEventListener('click', () => {socket.emit('dealCards', cardWidth, cardHeight)});
