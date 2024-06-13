@@ -11,7 +11,7 @@ const port = 4000;
 var users = [];
 
 const suits = ['♠', '♥', '♦', '♣'];
-const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+const values = ['A', '2', '3', '4', '5', '6', '7', '10', 'J', 'Q', 'K'];
 
 app.set("view engine", "ejs"); 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -30,7 +30,7 @@ io.on("connection" , (socket)=>{
       socket.broadcast.emit('userJoined' , id);
       socket.on('disconnect', ()=>{
         socket.broadcast.emit('userDisconnect' , id, socket.id);
-        //delete users[socket.id];
+        delete users[socket.id];
       })
     })
     

@@ -22,7 +22,7 @@ navigator.mediaDevices.getUserMedia({
             addVideo(vid, userStream);
         })
         call.on('error', (err) => {
-            alert(err)
+            console.log(err);
         })
         call.on("close", () => {
             vid.remove();
@@ -30,7 +30,8 @@ navigator.mediaDevices.getUserMedia({
         peerConnections[call.peer] = call;
     })
 }).catch(err => {
-    alert(err.message)
+    const img = document.createElement('img');
+    addImageUser(img);
 })
 
 peer.on('open', (id) => {
@@ -51,7 +52,7 @@ socket.on("userJoined", id => {
     const call = peer.call(id, myVideoStream);
     const vid = document.createElement('video');
     call.on('error', (err) => {
-        alert(err);
+        console.log(err);
     })
     call.on('stream', userStream => {
         addVideo(vid, userStream);
@@ -75,6 +76,11 @@ function addVideo(video, stream) {
         video.play()
     })
     videoGrid.append(video);
+}
+
+function addImageUser(img){
+    img.src = 'https://the8bitdeck.com/images/King.png';
+    videoGrid.append(img);
 }
 
 function sendMessageChat(msg, socket_id=null){
@@ -103,11 +109,11 @@ const cardHeight = 120;
 function drawCard(card, x, y) {
     ctx.fillStyle = 'white';
     ctx.fillRect(x, y, cardWidth, cardHeight);
-    ctx.strokeRect(x, y, cardWidth, cardHeight);
-    ctx.fillStyle = card.suit === '♥' || card.suit === '♦' ? 'red' : 'black';
-    ctx.font = '20px Arial';
-    ctx.fillText(card.value, x + 10, y + 30);
-    ctx.fillText(card.suit, x + 10, y + 60);
+    let imageCard = new Image();
+    imageCard.src = './media/sprites/'+card.value+card.suit+'.png';
+    imageCard.onload = function() {
+        ctx.drawImage(imageCard, x, y, cardWidth, cardHeight);
+    }
 }
 
 socket.on('clearRectCards', function(){

@@ -142,3 +142,7 @@ body {
 .videoCard video{
     width: 10%;
 }
+
+.videoCard img{
+    width: 10%;
+}
