@@ -120,8 +120,10 @@ socket.on('clearRectCards', function(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 });
 
-socket.on('drawCards', function(card, x, y){
-    drawCard(card, x, y);
+socket.on('drawCards', function(card, x, y, userId){
+    if(userId == socket.id){
+        drawCard(card, x, y);
+    }
 });
 
 dealButton.addEventListener('click', () => {socket.emit('dealCards', cardWidth, cardHeight)});
