@@ -98,26 +98,32 @@ socket.on('chat message', function(user, msg){
     document.getElementById('chat_inputMessage').value = '';
 });
 
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
+const handDecks = document.getElementById('handDecks');
+// const ctx = canvas.getContext('2d');
 const dealButton = document.getElementById('dealButton');
 
-const cardWidth = 80;
-const cardHeight = 120;
+const cardWidth = '80px';
+const cardHeight = '120px';
 
 // Função para desenhar uma carta
 function drawCard(card, x, y) {
-    ctx.fillStyle = 'white';
-    ctx.fillRect(x, y, cardWidth, cardHeight);
-    let imageCard = new Image();
-    imageCard.src = './media/sprites/'+card.value+card.suit+'.png';
-    imageCard.onload = function() {
-        ctx.drawImage(imageCard, x, y, cardWidth, cardHeight);
-    }
+    // ctx.fillStyle = 'white';
+    // ctx.fillRect(x, y, cardWidth, cardHeight);
+    // let imageCard = new Image();
+    // imageCard.src = './media/sprites/'+card.value+card.suit+'.png';
+    // imageCard.onload = function() {
+    //     ctx.drawImage(imageCard, x, y, cardWidth, cardHeight);
+    // }
+    let divDeck = document.createElement('div');
+    divDeck.style.width = cardWidth;
+    divDeck.style.height = cardHeight;
+    divDeck.style.backgroundImage = 'url("./media/sprites/'+card.value+card.suit+'.png")';
+    handDecks.appendChild(divDeck);
 }
 
 socket.on('clearRectCards', function(){
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // ctx.clearRect(0, 0, canvas.width, canvas.height);
+    handDecks.innerHTML = "";
 });
 
 socket.on('drawCards', function(card, x, y, userId){
