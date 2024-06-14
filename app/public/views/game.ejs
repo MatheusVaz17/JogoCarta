@@ -12,8 +12,9 @@
     <div class="game">
         <div id="videoDiv" class="videoCard"></div>
         <input type="hidden" value="<%= name %>" id="userName">
-        <input type="hidden" value="<%= name %>" id="userColor">
+        <input type="hidden" value="<%= color %>" id="userColor">
         <div class="table">
+            <canvas id="deckCanvas" width="1000" height="600"></canvas>
             <button id="dealButton">Distribuir Cartas</button>
             
         </div>
@@ -22,9 +23,10 @@
         </div>
     </div>
     <div class="chat">
+        <img src="https://preview.redd.it/cardistry-background-wallpaper-v0-g74nak1rpdvc1.jpg?width=640&crop=smart&auto=webp&s=4d37abec44f9950e98f1397cede2b2c6aae9843f" alt="background-image" class="background-chat">
         <ul id="chat"></ul>
         <div>
-            <input id="chat_inputMessage" />
+            <input id="chat_inputMessage" type="text" placeholder="Digite aqui sua mensagem!" />
             <button id="chat_sendMessage" onclick="sendMessageChat(document.getElementById('chat_inputMessage').value)">Enviar</button>
         </div>
     </div>

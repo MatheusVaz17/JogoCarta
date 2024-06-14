@@ -93,7 +93,7 @@ function sendMessageChat(msg, socket_id=null){
 socket.on('chat message', function(user, msg){
     var item = document.createElement('li');
     item.textContent = user.name+': '+msg;
-    item.style.color = user.color;
+    item.style.backgroundColor = user.color;
     chat.appendChild(item);
     document.getElementById('chat_inputMessage').value = '';
 });
@@ -127,3 +127,13 @@ socket.on('drawCards', function(card, x, y, userId){
 });
 
 dealButton.addEventListener('click', () => {socket.emit('dealCards', cardWidth, cardHeight)});
+
+const deckCanvas = document.getElementById('deckCanvas');
+const deckCtx = deckCanvas.getContext('2d');
+deckCtx.fillStyle = 'white';
+deckCtx.fillRect(10, 30, cardWidth, cardHeight);
+let imageDecks = new Image();
+imageDecks.src = './media/sprites/decks.png';
+imageDecks.onload = function() {
+    deckCtx.drawImage(imageDecks, 140, 200, 100, 120);
+}
