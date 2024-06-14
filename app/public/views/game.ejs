@@ -1,44 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Game</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Carter+One&display=swap"
+      rel="stylesheet"
+    />
+  </head>
 
-<body>
+  <body>
     <div class="game">
-        <div id="videoDiv" class="videoCard"></div>
-        <input type="hidden" value="<%= name %>" id="userName">
-        <input type="hidden" value="<%= color %>" id="userColor">
-        <div class="table">
-            <canvas id="deckCanvas" width="1000" height="600"></canvas>
-            <button id="dealButton">Distribuir Cartas</button>
-            
-        </div>
-        <div class="hand">
-            <canvas id="gameCanvas" width="800" height="150"></canvas>
-        </div>
+      <div id="videoDiv" class="videoCard"></div>
+      <input type="hidden" value="<%= name %>" id="userName" />
+      <input type="hidden" value="<%= color %>" id="userColor" />
+      <div class="table">
+        <canvas id="deckCanvas" width="1000" height="600"></canvas>
+        <button id="dealButton">Distribuir Cartas</button>
+      </div>
+      <div class="hand">
+        <canvas id="gameCanvas" width="800" height="150"></canvas>
+      </div>
     </div>
     <div class="chat">
-        <img src="https://preview.redd.it/cardistry-background-wallpaper-v0-g74nak1rpdvc1.jpg?width=640&crop=smart&auto=webp&s=4d37abec44f9950e98f1397cede2b2c6aae9843f" alt="background-image" class="background-chat">
-        <ul id="chat"></ul>
-        <div>
-            <input id="chat_inputMessage" type="text" placeholder="Digite aqui sua mensagem!" />
-            <button id="chat_sendMessage" onclick="sendMessageChat(document.getElementById('chat_inputMessage').value)">Enviar</button>
-        </div>
+      <img
+        src="https://preview.redd.it/cardistry-background-wallpaper-v0-g74nak1rpdvc1.jpg?width=640&crop=smart&auto=webp&s=4d37abec44f9950e98f1397cede2b2c6aae9843f"
+        alt="background-image"
+        class="background-chat"
+      />
+      <ul id="chat"></ul>
+      <div>
+        <input
+          id="chat_inputMessage"
+          type="text"
+          placeholder="Digite aqui sua mensagem!"
+        />
+        <button
+          id="chat_sendMessage"
+          onclick="sendMessageChat(document.getElementById('chat_inputMessage').value)"
+        >
+          Enviar
+        </button>
+      </div>
     </div>
 
-
-
     <script type="text/javascript">
-        var roomID = "123"
+      var roomID = "123";
     </script>
     <script src="socket.io/socket.io.js"></script>
     <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
     <script defer src="client.js"></script>
-</body>
-
+  </body>
 </html>
