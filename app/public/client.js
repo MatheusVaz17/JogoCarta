@@ -99,7 +99,7 @@ socket.on('chat message', function(user, msg){
 });
 
 const handDecks = document.getElementById('handDecks');
-// const ctx = canvas.getContext('2d');
+const showDecks = document.getElementById('showDecks');
 const dealButton = document.getElementById('dealButton');
 
 const cardWidth = '80px';
@@ -107,22 +107,33 @@ const cardHeight = '120px';
 
 // Função para desenhar uma carta
 function drawCard(card, x, y) {
-    // ctx.fillStyle = 'white';
-    // ctx.fillRect(x, y, cardWidth, cardHeight);
-    // let imageCard = new Image();
-    // imageCard.src = './media/sprites/'+card.value+card.suit+'.png';
-    // imageCard.onload = function() {
-    //     ctx.drawImage(imageCard, x, y, cardWidth, cardHeight);
-    // }
     let divDeck = document.createElement('div');
     divDeck.style.width = cardWidth;
     divDeck.style.height = cardHeight;
     divDeck.style.backgroundImage = 'url("./media/sprites/'+card.value+card.suit+'.png")';
+    divDeck.onclick = drawShowCard(card);
     handDecks.appendChild(divDeck);
 }
 
+function drawMainCard(card){
+    showDecks.innerHTML = "";
+    let divDeck = document.createElement('div');
+    divDeck.style.width = cardWidth;
+    divDeck.style.height = cardHeight;
+    divDeck.style.backgroundImage = 'url("./media/sprites/'+card.value+card.suit+'.png")';
+    divDeck.style.rotate = '27deg';
+    showDecks.appendChild(divDeck);
+}
+
+function drawShowCard(card){
+    let divDeck = document.createElement('div');
+    divDeck.style.width = cardWidth;
+    divDeck.style.height = cardHeight;
+    divDeck.style.backgroundImage = 'url("./media/sprites/'+card.value+card.suit+'.png")';
+    showDecks.appendChild(divDeck);
+}
+
 socket.on('clearRectCards', function(){
-    // ctx.clearRect(0, 0, canvas.width, canvas.height);
     handDecks.innerHTML = "";
 });
 
@@ -132,14 +143,18 @@ socket.on('drawCards', function(card, x, y, userId){
     }
 });
 
+socket.on('drawMainCard', function(card){
+    drawMainCard(card);
+});
+
 dealButton.addEventListener('click', () => {socket.emit('dealCards', cardWidth, cardHeight)});
 
-const deckCanvas = document.getElementById('deckCanvas');
-const deckCtx = deckCanvas.getContext('2d');
-deckCtx.fillStyle = 'white';
-deckCtx.fillRect(10, 30, cardWidth, cardHeight);
-let imageDecks = new Image();
-imageDecks.src = './media/sprites/decks.png';
-imageDecks.onload = function() {
-    deckCtx.drawImage(imageDecks, 140, 200, 100, 120);
-}
+// const deckCanvas = document.getElementById('deckCanvas');
+// const deckCtx = deckCanvas.getContext('2d');
+// deckCtx.fillStyle = 'white';
+// deckCtx.fillRect(10, 30, cardWidth, cardHeight);
+// let imageDecks = new Image();
+// imageDecks.src = './media/sprites/decks.png';
+// imageDecks.onload = function() {
+//     deckCtx.drawImage(imageDecks, 140, 200, 100, 120);
+// }

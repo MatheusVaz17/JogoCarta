@@ -193,3 +193,13 @@ body {
 .videoCard img{
     width: 10%;
 }
+
+#showDecks{
+    width: 800px;
+    height: 315px;
+    div{
+        position: absolute;
+        top: 125px;
+        left: 135px;
+    }
+}

@@ -87,5 +87,5 @@ function dealCards(cardWidth, cardHeight) {
       io.emit('drawCards', deck.pop(), positionX, 20, users[key].socket_id);
     }
   });
-
+  io.emit('drawMainCard', deck.pop());
 }
