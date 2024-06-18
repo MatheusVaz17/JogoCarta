@@ -22,6 +22,7 @@ body {
     height: 100vh;
     display: flex;
     overflow: hidden;
+    cursor: url("./media/cursor/default.png"), auto;
 }
 
 * {
@@ -110,6 +111,7 @@ body {
     transition: 300ms;
     display: flex;
     align-items: center;
+    cursor: url("./media/cursor/hover.png"), auto;
     &:hover {
         box-shadow: none;
         transform: scale(1.1);
@@ -147,7 +149,43 @@ body {
         width: 800px;
         height: 150px;
         display: flex;
+        position: relative;
+        justify-content: space-around;
+        div{
+            animation: animateCart 600ms ease;
+            transition: 300ms;
+            cursor: url("./media/cursor/hover.png"), auto;
+            &:hover{
+                transform: scale(1.4);
+            }
+        }
     }
+}
+
+@keyframes animateCart{
+    0%{
+        position: absolute;
+        left: -100%;
+    }
+    100%{
+        position: absolute;
+        left: 0;
+    }
+    /* 0%{
+        transform: rotate3d(12, 1, 1, 0deg);
+    }
+    25%{
+        transform: rotate3d(12, 1, 1, 90deg);
+    }
+    50%{
+        transform: rotate3d(12, 1, 1, 180deg);
+    }
+    75%{
+        transform: rotate3d(12, 1, 1, 270deg);
+    }
+    100%{
+        transform: rotate3d(12, 1, 1, 360deg);
+    } */
 }
 
 .card {
