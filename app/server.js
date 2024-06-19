@@ -12,8 +12,8 @@ var numDecks = 0;
 
 var users = [];
 
-const suits = ['♠', '♥', '♦', '♣'];
-const values = ['A', '2', '3', '4', '5', '6', '7', '10', 'J', 'Q', 'K'];
+const suits = ['♦','♠', '♥','♣'];
+const values = ['4', '5', '6', '7', '10', '11', '12', '1', '2', '3'];
 
 app.set("view engine", "ejs"); 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -42,6 +42,10 @@ io.on("connection" , (socket)=>{
 
     socket.on('dealCards', (cardWidth, cardHeight) => {
       dealCards(cardWidth, cardHeight);
+    })
+
+    socket.on('biggestCard', (cards, mainCard) => {
+      biggestCard(cards, mainCard);
     })
 })
 
@@ -88,4 +92,37 @@ function dealCards(cardWidth, cardHeight) {
     }
   });
   io.emit('drawMainCard', deck.pop());
+}
+
+function biggestCard(cards, mainCard){
+  //console.log(cards);
+  let biggestCard = '';
+  let biggestSuit = '';
+  let mainValue = mainCard.split("")[0];
+  cards.forEach((item) => {
+    //console.log(item.split("")[0]);
+    let value = item.split("")[0];
+    let suit = item.split("")[1];
+
+    if((values.indexOf(value) - 1) == values.indexOf(mainValue)){
+      biggestCard = value;
+      biggestSuit = suit;
+    }else{
+      if(biggestCard.length > 0 && (values.indexOf(biggestCard) - 1) == values.indexOf(mainValue)){
+        if(suits.indexOf(suit) > suits.indexOf(biggestSuit)){
+          biggestCard = value;
+          biggestSuit = suit;
+        }
+      }else{
+        if(biggestCard.length < 1 || values.indexOf(value) > values.indexOf(biggestCard)){
+          biggestCard = value;
+          biggestSuit = suit;
+        }
+      }
+    }
+
+    
+  });
+  console.log(biggestCard);
+  console.log(biggestSuit);
 }

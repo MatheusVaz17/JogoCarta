@@ -235,9 +235,16 @@ body {
 #showDecks{
     width: 800px;
     height: 315px;
-    div{
+    display: flex;
+    justify-content: space-around;
+    /* div{
         position: absolute;
         top: 125px;
         left: 135px;
-    }
+    } */
+}
+
+.tableCard{
+    position: relative;
+    top: 100%;
 }

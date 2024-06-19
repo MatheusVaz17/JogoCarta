@@ -111,26 +111,46 @@ function drawCard(card, x, y) {
     divDeck.style.width = cardWidth;
     divDeck.style.height = cardHeight;
     divDeck.style.backgroundImage = 'url("./media/sprites/'+card.value+card.suit+'.png")';
-    divDeck.onclick = drawShowCard(card);
+    divDeck.setAttribute("id", card.value+card.suit);
+    divDeck.onclick = function(){
+        drawShowCard(card);
+    }
     handDecks.appendChild(divDeck);
 }
 
 function drawMainCard(card){
     showDecks.innerHTML = "";
-    let divDeck = document.createElement('div');
-    divDeck.style.width = cardWidth;
-    divDeck.style.height = cardHeight;
-    divDeck.style.backgroundImage = 'url("./media/sprites/'+card.value+card.suit+'.png")';
-    divDeck.style.rotate = '27deg';
-    showDecks.appendChild(divDeck);
+    let divMainCard = document.createElement('div');
+    divMainCard.style.width = cardWidth;
+    divMainCard.style.height = cardHeight;
+    divMainCard.style.backgroundImage = 'url("./media/sprites/'+card.value+card.suit+'.png")';
+    divMainCard.style.rotate = '27deg';
+    divMainCard.style.position = 'absolute';
+    divMainCard.style.outline = 'dotted 3px #03df00';
+    divMainCard.setAttribute("data-main-value", card.value+card.suit);
+    showDecks.appendChild(divMainCard);
 }
 
 function drawShowCard(card){
-    let divDeck = document.createElement('div');
-    divDeck.style.width = cardWidth;
-    divDeck.style.height = cardHeight;
-    divDeck.style.backgroundImage = 'url("./media/sprites/'+card.value+card.suit+'.png")';
-    showDecks.appendChild(divDeck);
+    let divDeckTable = document.createElement('div');
+    divDeckTable.style.width = cardWidth;
+    divDeckTable.style.height = cardHeight;
+    divDeckTable.style.backgroundImage = 'url("./media/sprites/'+card.value+card.suit+'.png")';
+    divDeckTable.setAttribute("data-value", card.value+card.suit);
+    divDeckTable.className = 'tableCard';
+    showDecks.appendChild(divDeckTable);
+    document.getElementById(card.value+card.suit).remove();
+
+    let showCards = document.querySelectorAll('div[data-value]');
+    let mainCard = document.querySelectorAll('div[data-main-value]')[0];
+
+    let cardsValues = [];
+
+    showCards.forEach(div => {
+        cardsValues.push(div.getAttribute('data-value'));
+    });
+
+    socket.emit('biggestCard', cardsValues, mainCard.getAttribute('data-main-value'));
 }
 
 socket.on('clearRectCards', function(){
