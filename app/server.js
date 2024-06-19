@@ -99,29 +99,29 @@ function biggestCard(cards, mainCard){
   let biggestCard = '';
   let biggestSuit = '';
   let mainValue = mainCard.split("")[0];
+  const regex = /^(\d+)([^\d]+)$/;
   cards.forEach((item) => {
     //console.log(item.split("")[0]);
-    let value = item.split("")[0];
-    let suit = item.split("")[1];
+    let match = item.match(regex);
+    let value = match[1];
+    let suit = match[2];
 
-    if((values.indexOf(value) - 1) == values.indexOf(mainValue)){
-      biggestCard = value;
-      biggestSuit = suit;
+    if(biggestCard.length > 0 && (values.indexOf(biggestCard) - 1) == values.indexOf(mainValue)){
+      if(suits.indexOf(suit) > suits.indexOf(biggestSuit)){
+        biggestCard = value;
+        biggestSuit = suit;
+      }
     }else{
-      if(biggestCard.length > 0 && (values.indexOf(biggestCard) - 1) == values.indexOf(mainValue)){
-        if(suits.indexOf(suit) > suits.indexOf(biggestSuit)){
-          biggestCard = value;
-          biggestSuit = suit;
-        }
+      if((values.indexOf(value) - 1) == values.indexOf(mainValue)){
+        biggestCard = value;
+        biggestSuit = suit;
       }else{
-        if(biggestCard.length < 1 || values.indexOf(value) > values.indexOf(biggestCard)){
-          biggestCard = value;
-          biggestSuit = suit;
-        }
+          if(biggestCard.length < 1 || values.indexOf(value) > values.indexOf(biggestCard)){
+            biggestCard = value;
+            biggestSuit = suit;
+          } 
       }
     }
-
-    
   });
   console.log(biggestCard);
   console.log(biggestSuit);
