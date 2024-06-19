@@ -1,43 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fodinha Online</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+      @import url("https://fonts.googleapis.com/css2?family=Carter+One&display=swap");
+      body {
+        font-family: "Carter One", system-ui;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .wallpaper {
+        width: 100%;
+        height: 100vh;
+        position: relative;
+        &::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image: url("./media/images/wallpaper-2.webp");
+          background-repeat: no-repeat;
+          background-size: cover;
+          z-index: -1;
+        }
+      }
+      header,
+      section {
+        width: 70%;
+        margin: auto;
+      }
+
+      .input {
+        display: flex;
+        flex-direction: column;
+        width: fit-content;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .form-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        flex-direction: column;
+
+        h1 {
+          color: #fafafa;
+          font-size: 84px;
+          display: flex;
+          align-items: center;
+          letter-spacing: 10px;
+          padding: 10px;
+          backdrop-filter: brightness(0.5);
         }
 
-        header, section {
-            width: 70%;
-            margin: auto;
+        label {
+          color: white;
+          font-size: 24px;
         }
 
-        .input {
-            display: flex;
-            flex-direction: column;
-            width: fit-content;
+        button {
+          width: 100%;
+          padding: 5px;
+          font-size: 14px;
+          font-weight: bold;
+          border: none;
+          background-color: rgba(218, 44, 44, 0.733);
+          color: white;
+          cursor: pointer;
+          position: relative;
         }
+      }
     </style>
-</head>
-<body>
-    <header>
-        <!-- <h2>FODINHA ONLINE</h2> -->
-    </header>
-    <section>
+  </head>
+  <body>
+    <div class="wallpaper">
+      <section class="form-container">
+        <h1>LITTLE F <img src="./media/images/heart.png" alt="" /> CK</h1>
         <form action="/access" method="POST">
-            <div class="input">
-                <label>Nome do usuário: </label>
-                <input type="text" name="name" id="name"/>
+          <div class="input">
+            <label>Nome do usuário: </label>
+            <input type="text" name="name" id="name" />
 
-                <label>Senha: </label>
-                <input type="password" name="password" id="password"/>
-            </div>
-            <button type="submit">Entrar</button>
+            <label>Senha: </label>
+            <input type="password" name="password" id="password" />
+          </div>
+          <button type="submit">Entrar</button>
         </form>
-    </section>
-</body>
+      </section>
+    </div>
+  </body>
 </html>
