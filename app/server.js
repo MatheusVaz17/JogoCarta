@@ -95,13 +95,11 @@ function dealCards(cardWidth, cardHeight) {
 }
 
 function biggestCard(cards, mainCard){
-  //console.log(cards);
   let biggestCard = '';
   let biggestSuit = '';
   let mainValue = mainCard.split("")[0];
   const regex = /^(\d+)([^\d]+)$/;
   cards.forEach((item) => {
-    //console.log(item.split("")[0]);
     let match = item.match(regex);
     let value = match[1];
     let suit = match[2];
@@ -123,6 +121,5 @@ function biggestCard(cards, mainCard){
       }
     }
   });
-  console.log(biggestCard);
-  console.log(biggestSuit);
+  io.emit('styleBiggestCard', biggestCard, biggestSuit);
 }

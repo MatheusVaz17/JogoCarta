@@ -25,6 +25,7 @@ navigator.mediaDevices.getUserMedia({
             console.log(err);
         })
         call.on("close", () => {
+            vid.parentNode.remove();
             vid.remove();
         })
         peerConnections[call.peer] = call;
@@ -58,6 +59,7 @@ socket.on("userJoined", id => {
         addVideo(vid, userStream);
     })
     call.on('close', () => {
+        vid.parentNode.remove();
         vid.remove();
     })
     peerConnections[id] = call;
@@ -73,9 +75,12 @@ socket.on('userDisconnect', (id, socket_id) => {
 function addVideo(video, stream) {
     video.srcObject = stream;
     video.addEventListener('loadedmetadata', () => {
-        video.play()
-    })
-    videoGrid.append(video);
+        video.play();
+        let divVideo = document.createElement('div');
+        divVideo.classList.add('divVideo');
+        divVideo.append(video);
+        videoGrid.append(divVideo);
+    });
 }
 
 function addImageUser(img){
@@ -153,28 +158,29 @@ function drawShowCard(card){
     socket.emit('biggestCard', cardsValues, mainCard.getAttribute('data-main-value'));
 }
 
-socket.on('clearRectCards', function(){
+socket.on('clearRectCards', () => {
     handDecks.innerHTML = "";
 });
 
-socket.on('drawCards', function(card, x, y, userId){
+socket.on('drawCards', (card, x, y, userId) => {
     if(userId == socket.id){
         drawCard(card, x, y);
     }
 });
 
-socket.on('drawMainCard', function(card){
+socket.on('drawMainCard', (card) => {
     drawMainCard(card);
 });
 
-dealButton.addEventListener('click', () => {socket.emit('dealCards', cardWidth, cardHeight)});
+socket.on('styleBiggestCard', (biggestCard, biggestSuit) => {
+    let biggest = document.querySelector("div[data-value='"+biggestCard+biggestSuit+"']");
+    let showCards = document.querySelectorAll('div[data-value]');
 
-// const deckCanvas = document.getElementById('deckCanvas');
-// const deckCtx = deckCanvas.getContext('2d');
-// deckCtx.fillStyle = 'white';
-// deckCtx.fillRect(10, 30, cardWidth, cardHeight);
-// let imageDecks = new Image();
-// imageDecks.src = './media/sprites/decks.png';
-// imageDecks.onload = function() {
-//     deckCtx.drawImage(imageDecks, 140, 200, 100, 120);
-// }
+    showCards.forEach(div => {
+        div.style.outline = null;
+    });
+
+    biggest.style.outline = 'dotted 3px #ffffff';
+});
+
+dealButton.addEventListener('click', () => {socket.emit('dealCards', cardWidth, cardHeight)});

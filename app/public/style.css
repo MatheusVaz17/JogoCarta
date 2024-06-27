@@ -216,16 +216,23 @@ body {
     color: red;
 }
 
+.divVideo{
+    width: 120px;
+    height: 120px;
+}
+
 .videoCard{
     position:absolute;
     height:20vh;
     width:100%;
     overflow: hidden;
     margin-left: 10px;
+    display: flex;
 }
 
 .videoCard video{
-    width: 10%;
+    width: 100%;
+    min-height: 100%;
 }
 
 .videoCard img{
@@ -237,11 +244,6 @@ body {
     height: 315px;
     display: flex;
     justify-content: space-around;
-    /* div{
-        position: absolute;
-        top: 125px;
-        left: 135px;
-    } */
 }
 
 .tableCard{
